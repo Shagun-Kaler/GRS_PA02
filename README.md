@@ -22,14 +22,14 @@ MT25190_PA02/
 ├── MT25190_Part_A2_Client.c          # One-copy client with recvmsg
 ├── MT25190_Part_A3_Server.c          # Zero-copy server with MSG_ZEROCOPY (port 8082)
 ├── MT25190_Part_A3_Client.c          # Zero-copy client
-├── MT25190_Part_C_.sh # Automated experiment script
+├── MT25190_Part_C_run_experiments_.sh # Automated experiment script
 ├── MT25190_Part_D_Throughput_vs_MessageSize.py
 ├── MT25190_Part_D_Latency_vs_ThreadCount.py
 ├── MT25190_Part_D_CacheMisses_vs_MessageSize.py
 ├── MT25190_Part_D_CyclesPerByte.py
 ├── Makefile                           # Build system
 ├── README.md                          # This file
-└── MT25190_Part_C.csv                        # reults are stored in CSV
+└── MT25190_Part_C_results.csv                        # reults are stored in CSV
 
 
 ## Key Features
@@ -66,7 +66,7 @@ perf stat -e cpu-cycles,cache-misses,L1-dcache-load-misses,LLC-load-misses,conte
 ```
 
 ### Part C: Automation
-The bash script `MT25190_Part_C.sh`:
+The bash script `MT25190_Part_C_run_experiments.sh`:
 - Compiles all implementations via Makefile
 - Runs experiments with varying message sizes (512, 1024, 2048, 4096)
 - Varies thread counts (1, 2, 4, 8)
@@ -76,7 +76,7 @@ The bash script `MT25190_Part_C.sh`:
 - Handles hybrid CPU architectures (sums metrics across CPU types)
 
 ### Part D: Visualization
-Four Python plotting scripts with **hardcoded data** (values copied from consolidated_results.csv):
+Four Python plotting scripts with **hardcoded data** (values copied from MT25190_Part_C_results.csv):
 1. **Throughput vs Message Size:** Shows performance scaling across implementations
 2. **Latency vs Thread Count:** Analyzes contention effects
 3. **Cache Misses vs Message Size:** Memory hierarchy impact
@@ -133,12 +133,12 @@ This will:
 - Compile all code via Makefile
 - Run 48 experiments (3 implementations × 4 message sizes × 4 thread counts)
 - Capture perf metrics and application throughput/latency
-- Generate consolidated CSV in `results/consolidated_results.csv`
+- Generate consolidated CSV in `results/MT25190_Part_C_results.csv`
 - Takes approximately 25-30 minutes (30 seconds per experiment)
 
 **Quick Test Mode** (for debugging):
 ```bash
-# Edit MT25190_Part_C.sh and set QUICK_TEST=1
+# Edit MT25190_Part_C_run_experiments.sh and set QUICK_TEST=1
 # This runs only 12 experiments with 3-second duration each
 ```
 
@@ -236,30 +236,6 @@ Based on experimental runs (30 seconds each, localhost):
 | A3 Zero-Copy  | ~69.9                | 4096B, 4 threads |
 
 *Note: Zero-copy shows lower peak throughput on localhost due to MSG_ERRQUEUE overhead; benefits are more visible on real network interfaces.*
-
-## Troubleshooting
-
-### MSG_ZEROCOPY not supported
-```bash
-# Check kernel support (requires Linux 4.14+)
-grep ZEROCOPY /boot/config-$(uname -r)
-# Should show: CONFIG_NET_ZERO_COPY=y
-```
-
-### Permission denied for perf
-```bash
-sudo sysctl -w kernel.perf_event_paranoid=-1
-```
-
-### Port already in use
-```bash
-# Kill existing processes
-killall MT25190_Part_A1_Server MT25190_Part_A2_Server MT25190_Part_A3_Server
-# Or use different ports via command line arguments
-```
-
-### Hybrid CPU architecture warnings
-The experiment script handles hybrid CPUs (Intel 12th gen+) by summing metrics from all CPU types (atom/core).
 
 ## System Configuration
 

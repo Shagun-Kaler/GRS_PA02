@@ -71,8 +71,8 @@ clean:
 # Run automated experiments
 run_experiments: all
 	@echo "Running automated experiments..."
-	@chmod +x MT25190_Part_C.sh
-	@./MT25190_Part_C.sh
+	@chmod +x MT25190_Part_C_run_experiments.sh
+	@./MT25190_Part_C_run_experiments.sh
 
 # Generate plots
 plots:

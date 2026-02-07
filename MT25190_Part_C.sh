@@ -34,7 +34,7 @@ mkdir -p ${RESULTS_DIR}
 
 # Create single consolidated CSV file with header
 # Added ThroughputGbps, LatencyUs, TotalBytes from client METRICS output for Part D plots
-CONSOLIDATED_CSV="${RESULTS_DIR}/MT25190_Part_C.csv"
+CONSOLIDATED_CSV="${RESULTS_DIR}/MT25190_Part_C_results.csv"
 echo "Implementation,MessageSize,Threads,CPUCycles,CacheMisses,L1Misses,LLCMisses,ContextSwitches,TimeElapsed,ThroughputGbps,LatencyUs,TotalBytes" > "${CONSOLIDATED_CSV}"
 
 # FIX: Check perf permissions before running experiments
